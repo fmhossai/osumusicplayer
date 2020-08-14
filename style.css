@@ -1,0 +1,36 @@
+:root{
+    --max-progress-bar-width: 25rem;
+}
+.container-bg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.progressbar{
+    background: black;
+    border-radius: 10px;
+    height:1rem;
+    width: var(--max-progress-bar-width)
+}
+.progressbar:after{
+    content:'';
+    display:block;
+    background: red;
+    width: var(--max-progress-bar-width);
+    height : 1rem;
+    border-radius: 10px;
+    animation-name: woosh;
+    animation-duration: var(--song-duration);
+    animation-timing-function: linear;
+}
+@keyframes woosh{
+    from{width: 0rem;}
+    to{width: var(--max-progress-bar-width)}
+}
+.bg{
+    padding-bottom: 1rem;
+    width:50vw;
+    height:50vh;
+    border-radius: 2px;
+}
