@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>osu! Music Player</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -11,8 +11,15 @@
         <img src="ds.jpg" class="bg" alt="">
         <div class="progressbar" id="progress"></div>
         <div class="numberBeatmaps">sdsd</div>
+        <div class="SongTitle"></div>
+        <div class="SongArtist"></div>
         <div class="meow"></div>
-        <button id="rand">hi</button>
+        <div class="buttons">
+            <button class="previous">Prev</button>
+            <button class="play">Play</button>
+            <button class="next">Next</button>
+            <button id="rand">Shuffle</button>
+        </div>
     </div>
     <script>require('./renderer.js')</script>
 </body>

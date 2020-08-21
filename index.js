@@ -2,17 +2,32 @@ const {app, BrowserWindow, dialog, ipcMain, Menu} = require("electron")
 const fs = require("fs")
 const { dirname } = require("path")
 
+//path to songs folder and length of directory
 let pathyy
 let osuDirectoryLength
+
+
 function RandomSong(event, randomNumber){
     files = fs.readdirSync(pathyy + `/` + fs.readdirSync(pathyy)[randomNumber])
     path2 = pathyy + `/` + fs.readdirSync(pathyy)[randomNumber]
-    console.log(files)
-    let reg = /(?<=").+\.(osu)/
-    const info = files.find((element)=> reg.exec(element))
-    let infoFile = path2 + '/' + info
-    event.reply("cool",[files,path2])
+    let reg = /.+(?=(.osu))/
+    const info = files.find((element)=> reg.test(element))
+    let infoFilePath = path2 + '/' + info
+    let name
+    let art 
+    let bg
+    const infoFile = fs.readFileSync(infoFilePath)
+    const regTitle = /(?<=(Title:)).+/
+    const regArtist = /(?<=(Artist:)).+/
+    const regBG = /(?<=(")).+\.(jpg|png|JPG)/
+    name = `${regTitle.exec(infoFile)[0]}`
+    console.log(name)
+    art = `${regArtist.exec(infoFile)[0]}`
+    bg = `${regBG.exec(infoFile)[0]}`
+    event.reply("cool",[files,path2,name,art,bg])
 }
+
+
 function createWindow(){
     const template = [
         {label: "File",
