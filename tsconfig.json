@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "watch": true,
+        "lib": ["DOM","ES2017"],
+        "noImplicitAny" : true,
+        "alwaysStrict" : true,
+        "outDir" : "./build",
+        "rootDir" : "./src"
+    },
+    "exclude": ["node_modules"],
+}

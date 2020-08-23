@@ -1,5 +1,9 @@
 :root{
     --max-progress-bar-width: 25rem;
+    --play-state: running;
+}
+#playButton{
+    width:100px;
 }
 .container-bg{
     display: flex;
@@ -7,25 +11,30 @@
     justify-content: center;
     flex-direction: column;
 }
+
 .progressbar{
+    position: relative;
     background: black;
     border-radius: 10px;
     height:1rem;
+    padding: 4px;
     width: var(--max-progress-bar-width)
 }
-.progressbar:after{
+.progressbar:before{
     content:'';
     display:block;
     background: red;
+    position: absolute;
     width: var(--max-progress-bar-width);
-    height : 1rem;
+    height: 1rem;
     border-radius: 10px;
     animation-name: woosh;
     animation-duration: var(--song-duration);
     animation-timing-function: linear;
+    animation-play-state: var(--play-state);
 }
 @keyframes woosh{
-    from{width: 0rem;}
+    from{width: 0.5rem;}
     to{width: var(--max-progress-bar-width)}
 }
 .bg{
@@ -33,4 +42,28 @@
     width:50vw;
     height:50vh;
     border-radius: 2px;
+}
+.hvr-grow {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+
+.hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
+    transform: scale(1.1);
+}
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

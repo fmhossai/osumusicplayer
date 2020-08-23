@@ -3,15 +3,16 @@ const fs = require("fs")
 const { dirname } = require("path")
 
 //path to songs folder and length of directory
-let pathyy
-let osuDirectoryLength
+let pathyy : string
+let osuDirectoryLength : number
 
 
-function RandomSong(event, randomNumber){
-    files = fs.readdirSync(pathyy + `/` + fs.readdirSync(pathyy)[randomNumber])
-    path2 = pathyy + `/` + fs.readdirSync(pathyy)[randomNumber]
+
+function RandomSong(event:any, randomNumber:number){
+    const Songfiles = fs.readdirSync(pathyy + `/` + fs.readdirSync(pathyy)[randomNumber])
+    const path2 = pathyy + `/` + fs.readdirSync(pathyy)[randomNumber]
     let reg = /.+(?=(.osu))/
-    const info = files.find((element)=> reg.test(element))
+    const info = Songfiles.find((element:string)=> reg.test(element))
     let infoFilePath = path2 + '/' + info
     let name
     let art 
@@ -24,7 +25,7 @@ function RandomSong(event, randomNumber){
     console.log(name)
     art = `${regArtist.exec(infoFile)[0]}`
     bg = `${regBG.exec(infoFile)[0]}`
-    event.reply("cool",[files,path2,name,art,bg])
+    event.reply("cool",[Songfiles,path2,name,art,bg])
 }
 
 
@@ -34,14 +35,20 @@ function createWindow(){
          submenu:[
              {label: "Choose osu! Folder",
              click: ()=>{
-                dialog.showOpenDialog({properties:["openDirectory"]}).then((result)=>{
+                dialog.showOpenDialog({properties:["openDirectory"]}).then((result:any)=>{
                     pathyy = result.filePaths[0]
-                    files = fs.readdirSync(pathyy)
-                    const files2 = files.filter((element)=> (element !== '._.DS_Store' && element !=='.DS_Store'))
+                    let files = fs.readdirSync(pathyy)
+                    files = files.filter((element: string)=> (element !== '._.DS_Store' && element !=='.DS_Store'))
                     osuDirectoryLength = files.length
                     win.webContents.send("numberofBeatmaps", files.length)  
                 })
-             }}
+             }},
+             {label : "New",
+             click: ()=>{
+                 const winFile = new BrowserWindow()
+             }
+
+             }
          ]},
         {label : 'Edit',
          submenu: [
@@ -64,8 +71,9 @@ function createWindow(){
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
     win.loadFile("index.html")
-    ipcMain.on("randomButton",(e,arg)=>{
+    ipcMain.on("randomButton",(e:any)=>{
         const randomNumber = Math.floor(Math.random()*(osuDirectoryLength-1))
+
         RandomSong(e,randomNumber)
     })
 }
