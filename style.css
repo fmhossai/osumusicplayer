@@ -2,7 +2,7 @@
     --max-progress-bar-width: 25rem;
     --play-state: running;
 }
-#playButton{
+.button{
     width:100px;
 }
 .container-bg{

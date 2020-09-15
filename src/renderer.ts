@@ -13,10 +13,18 @@ let playPaths = [
     S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z`
 ] 
 let songElement = document.getElementById("playButton") as HTMLAudioElement
-
+if (localStorage.getItem("DirectoryLength")){
+    let numberOfBeatmaps = document.querySelector(".numberBeatmaps")
+    numberOfBeatmaps.textContent = `you have ${localStorage.getItem("DirectoryLength")} beatmaps in your songs library`
+}
+else{
+    let numberOfBeatmaps = document.querySelector(".numberBeatmaps")
+    numberOfBeatmaps.textContent = `Choose osu! Songs Folder`
+}
 songElement.addEventListener("click", function(){
-    if (this.paused){
-        this.play()
+    let song = document.getElementById("song") as HTMLAudioElement
+    if (song.paused){
+        song.play()
         document.documentElement.style.setProperty("--play-state", "running")
         while(this.firstChild){
             this.firstChild.remove()
@@ -28,7 +36,7 @@ songElement.addEventListener("click", function(){
         })
     }
     else{
-        this.pause()
+        song.pause()
         document.documentElement.style.setProperty("--play-state", "paused")
         while(this.firstChild){
             this.firstChild.remove()
@@ -61,11 +69,11 @@ function SongMethods(song:HTMLAudioElement){
 
 const randomButton = document.getElementById("rand")
 randomButton.addEventListener("click",()=>{
-    ipcRenderer.send("randomButton")
+    ipcRenderer.send("randomButton", [parseInt(localStorage.getItem("DirectoryLength")),localStorage.getItem("SongsPath")])
 })
-ipcRenderer.on("numberofBeatmaps",(e:any,result:number)=>{
-    let numberOfBeatmaps = document.querySelector(".numberBeatmaps")
-    numberOfBeatmaps.textContent = `you have ${result} beatmaps in your songs library`
+ipcRenderer.on("numberofBeatmaps",(e:any,result:Array<any>)=>{
+    localStorage.setItem("SongsPath", `${result[1]}`)
+    localStorage.setItem("DirectoryLength",`${result[0]}`)
 })
 ipcRenderer.on("cool",(e:any,result:Array<any>)=>{
     display(result)
@@ -73,10 +81,10 @@ ipcRenderer.on("cool",(e:any,result:Array<any>)=>{
 function display(result:Array<any>){ 
     let song = document.getElementById("song") as HTMLAudioElement
     let bg = document.querySelector(".bg") as HTMLImageElement
-    const regSong = /^.+\.mp3$/
-    const SongFile = result[0].find((element:string)=> regSong.test(element))
+    // const regSong = /^.*\.mp3$/
+    // const SongFile = result[0].find((element:string)=> regSong.test(element))
     document.getElementById("progress").classList.remove("progressbar")
-    song.src = `${result[1]}/${SongFile}`
+    song.src = `${result[1]}/${result[5]}`
     SongMethods(song)
     bg.src = `${result[1]}/${result[4]}`
     let title = document.querySelector(".SongTitle")

@@ -14,15 +14,17 @@ function RandomSong(event, randomNumber) {
     let name;
     let art;
     let bg;
+    let songFile;
     const infoFile = fs.readFileSync(infoFilePath);
     const regTitle = /(?<=(Title:)).+/;
     const regArtist = /(?<=(Artist:)).+/;
     const regBG = /(?<=(")).+\.(jpg|png|JPG)/;
+    const regsongFile = /(?<=AudioFilename: ).+mp3/;
     name = `${regTitle.exec(infoFile)[0]}`;
-    console.log(name);
+    songFile = `${regsongFile.exec(infoFile)[0]}`;
     art = `${regArtist.exec(infoFile)[0]}`;
     bg = `${regBG.exec(infoFile)[0]}`;
-    event.reply("cool", [Songfiles, path2, name, art, bg]);
+    event.reply("cool", [Songfiles, path2, name, art, bg, songFile]);
 }
 function createWindow() {
     const template = [
@@ -33,7 +35,7 @@ function createWindow() {
                             let files = fs.readdirSync(pathyy);
                             files = files.filter((element) => (element !== '._.DS_Store' && element !== '.DS_Store'));
                             osuDirectoryLength = files.length;
-                            win.webContents.send("numberofBeatmaps", files.length);
+                            win.webContents.send("numberofBeatmaps", [files.length, pathyy]);
                         });
                     } },
                 { label: "New",
@@ -63,7 +65,9 @@ function createWindow() {
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
     win.loadFile("index.html");
-    ipcMain.on("randomButton", (e) => {
+    ipcMain.on("randomButton", (e, args) => {
+        osuDirectoryLength = args[0];
+        pathyy = args[1];
         const randomNumber = Math.floor(Math.random() * (osuDirectoryLength - 1));
         RandomSong(e, randomNumber);
     });
